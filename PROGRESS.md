@@ -61,3 +61,7 @@ New browser scans exclude recognizable front matter and reference ranges without
 ## Local Desklib pilot
 
 New scans in the pilot use the pinned Desklib v1.01 INT8 export with ONNX Runtime Web 1.31.1. The browser worker streams model weights into persistent origin-private storage, then scores passages sequentially. The experimental 0.15 cutoff applies only to the new detector. TMR remains selectable in development diagnostics and historical TMR results retain their provenance and review cutoff. No environment variables or database migrations were added.
+
+## Phone usability
+
+The phone layout uses larger touch targets, report jump links and scrollable report tabs. Narrow PDF previews use smaller canvases and fewer thumbnails. Desklib is opt-in on narrow screens and can be started from the report after writing analysis finishes.

@@ -87,6 +87,7 @@ async function run(
   previous?: Scan,
   onStage: (stage: string) => void = () => {},
   cancel?: AbortSignal,
+  deferDetection = false,
 ) {
   const controller = new AbortController();
   const stop = () => controller.abort();
@@ -95,11 +96,13 @@ async function run(
   try {
     const detection = !needsBrowserDetection(previous?.ai)
       ? Promise.resolve(null)
-      : import("@/lib/detect-in-browser")
-          .then(({ detectInBrowser }) =>
-            detectInBrowser(source.text, onStage, controller.signal),
-          )
-          .catch(() => ({ error: "unavailable" as const }));
+      : deferDetection
+        ? Promise.resolve({ error: "mobile_deferred" as const })
+        : import("@/lib/detect-in-browser")
+            .then(({ detectInBrowser }) =>
+              detectInBrowser(source.text, onStage, controller.signal),
+            )
+            .catch(() => ({ error: "unavailable" as const }));
     const report = await runWriting(source, previous?.id, onStage);
     if (!needsBrowserDetection(report.scan.ai)) return report;
     const result = await detection;
@@ -158,6 +161,7 @@ export function NewAnalysis({ retains }: { retains: boolean }) {
   const [scan, setScan] = useState<Scan>();
   const [warning, setWarning] = useState<string>();
   const [consent, setConsent] = useState(false);
+  const [mobileDetection, setMobileDetection] = useState(false);
   const [drag, setDrag] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [busy, setBusy] = useState("");
@@ -202,12 +206,19 @@ export function NewAnalysis({ retains }: { retains: boolean }) {
       setBusy(retry ? "Retrying failed analysis" : "Starting analysis");
       const cancel = new AbortController();
       detectionCancel.current = cancel;
-      setCanCancel(needsBrowserDetection(scan?.ai));
+      const deferDetection =
+        !retry &&
+        !mobileDetection &&
+        window.matchMedia(
+          "(max-width: 700px), (max-width: 950px) and (pointer: coarse)",
+        ).matches;
+      setCanCancel(!deferDetection && needsBrowserDetection(scan?.ai));
       const result = await run(
         working,
         retry ? scan : undefined,
         setBusy,
         cancel.signal,
+        deferDetection,
       );
       setBusy("Opening report");
       const incoming = result.scan;
@@ -243,6 +254,7 @@ export function NewAnalysis({ retains }: { retains: boolean }) {
               setText("");
               setTab("file");
               setConsent(false);
+              setMobileDetection(false);
               setError("");
             }}
           >
@@ -441,6 +453,15 @@ export function NewAnalysis({ retains }: { retains: boolean }) {
             </label>
           </div>
         </div>
+        <label className="consent mobile-detection">
+          <input
+            type="checkbox"
+            checked={mobileDetection}
+            disabled={Boolean(busy)}
+            onChange={(event) => setMobileDetection(event.target.checked)}
+          />
+          <span>Run on-device AI detection (first use downloads about 485 MB). Writing analysis runs either way.</span>
+        </label>
         {error && (
           <p role="alert" className="error">
             {error}

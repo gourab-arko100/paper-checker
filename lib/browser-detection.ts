@@ -26,6 +26,8 @@ export const detectionErrors = {
     "Browser detection requires a browser with Web Workers and WebAssembly support.",
   storage:
     "Desklib could not be saved in browser storage. Free up space or try another browser. Gemini writing analysis remains available.",
+  mobile_deferred:
+    "On-device AI detection was deferred. Use Retry failed analysis to start it. The first run downloads about 485 MB.",
   low_memory:
     "This device may not have enough memory for Desklib. You can still use Gemini writing analysis.",
   unavailable:

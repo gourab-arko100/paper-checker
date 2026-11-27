@@ -561,6 +561,21 @@ details p {
 @media (max-width: 560px) {
   .nav {
     height: 64px;
+    gap: 8px;
+  }
+  .nav .brand {
+    font-size: 1.05rem;
+  }
+  .nav .brand-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 6px;
+  }
+  .nav-actions .button {
+    min-height: 44px;
+    padding-inline: 10px;
+    font-size: 0.85rem;
+    white-space: nowrap;
   }
   .nav-actions {
     gap: 7px;
@@ -1189,7 +1204,7 @@ textarea {
     max-height: none;
   }
 }
-@media (max-width: 700px) {
+@media (max-width: 700px), (max-width: 950px) and (pointer: coarse) {
   .workspace {
     display: block;
   }
@@ -1253,5 +1268,94 @@ textarea {
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
+  }
+}
+
+.report-jumps,
+.mobile-detection {
+  display: none;
+}
+
+@media (max-width: 700px), (max-width: 950px) and (pointer: coarse) {
+  .mobile-detection {
+    display: flex;
+    align-items: flex-start;
+    min-height: 44px;
+    margin: 0;
+  }
+
+  .workspace-main,
+  .report-grid > *,
+  .filter-grid > * {
+    min-width: 0;
+  }
+
+  .workspace .filter-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .report-jumps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .report-jumps a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding-inline: 10px;
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  .workspace .button,
+  .sidebar nav a,
+  .mini-tabs button,
+  .report-tabs button,
+  .reader-tools button,
+  .legend label {
+    min-height: 44px;
+  }
+
+  .reader-tools button {
+    min-width: 44px;
+  }
+
+  .report-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .report-tabs button {
+    flex: none;
+  }
+
+  .workspace input:not([type="checkbox"]),
+  .workspace select,
+  .workspace textarea,
+  .reader-tools input:not([type="checkbox"]) {
+    min-width: 0;
+    font-size: 16px;
+  }
+
+  .reader-tools input:not([type="checkbox"]) {
+    min-height: 44px;
+  }
+
+  .pdf-view.fullscreen {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .fullscreen .pdf-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
+  }
+
+  .docx-pane iframe {
+    display: block;
+    height: 60dvh;
   }
 }

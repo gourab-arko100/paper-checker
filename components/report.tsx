@@ -201,8 +201,12 @@ export function Report({
           {warning}
         </div>
       )}
+      <nav className="report-jumps" aria-label="Report navigation">
+        <a href="#report-results">Jump to results</a>
+        <a href="#report-document">Jump to document</a>
+      </nav>
       <div className="report-grid">
-        <section className="card reader">
+        <section id="report-document" className="card reader">
           <div className="reader-head">
             <h2>Document</h2>
             {hasOriginal && (
@@ -280,7 +284,7 @@ export function Report({
             </label>
           )}
         </section>
-        <section className="card report-data">
+        <section id="report-results" className="card report-data">
           <div className="report-tabs" aria-label="Report sections">
             {tabs.map((value) => (
               <button

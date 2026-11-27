@@ -28,3 +28,9 @@ One weights request served two separate workers in the same Chromium profile. To
 A separate browser smoke fixture verified DOCX extraction and that student information and references were excluded while the highlight slice matched the source text. The application’s automated tests also cover cover-page and contents exclusions.
 
 At the requested 0.15 cutoff, 1 of these two human-authored references were flagged. Keep this cutoff experimental. These papers check whole-document behavior and inference parity. A larger labeled set with human, generated and mixed full papers would be needed to estimate accuracy.
+
+## Using the pilot on a phone
+
+On screens up to 700 CSS pixels wide and touch-first screens up to 950 CSS pixels wide, on-device detection is opt-in before submitting a new analysis. This avoids starting a large download or a memory-heavy worker unexpectedly. Select the checkbox to run Desklib alongside Gemini, or start detection later with **Retry failed analysis**. A completed Gemini result is reused. Use a current mobile browser and keep the tab open during detection. Devices that report less than 4 GiB through the browser memory hint continue to show the low-memory status.
+
+The report offers jump links between results and the document. PDF preview uses fewer thumbnails in narrow readers and caps canvas resolution to reduce memory use. PDF search, zoom and highlight offsets are retained.

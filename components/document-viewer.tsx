@@ -45,6 +45,7 @@ export default function Viewer({
   const reader = useRef<HTMLDivElement>(null);
   const docx = useRef<HTMLIFrameElement>(null);
   const count = source.pages ?? 1;
+  const thumbnailCount = width < 500 ? 5 : 9;
   const pdfSource = useMemo(
     () =>
       source.type === "pdf" && source.bytes
@@ -260,11 +261,11 @@ export default function Viewer({
           {thumbnails && (
             <div className="thumbnail-bar">
               {Array.from(
-                { length: Math.min(9, count) },
+                { length: Math.min(thumbnailCount, count) },
                 (_, index) =>
                   Math.min(
-                    Math.max(1, visiblePage - 4),
-                    Math.max(1, count - 8),
+                    Math.max(1, visiblePage - Math.floor(thumbnailCount / 2)),
+                    Math.max(1, count - thumbnailCount + 1),
                   ) + index,
               ).map((number) => (
                 <button
@@ -277,6 +278,7 @@ export default function Viewer({
                   <Page
                     pageNumber={number}
                     width={56}
+                    devicePixelRatio={1}
                     renderAnnotationLayer={false}
                     renderTextLayer={false}
                   />
@@ -293,6 +295,7 @@ export default function Viewer({
               pageNumber={visiblePage}
               width={width}
               scale={zoom}
+              devicePixelRatio={width < 500 ? Math.min(globalThis.devicePixelRatio || 1, 1.5) : undefined}
               renderAnnotationLayer={false}
               renderTextLayer={false}
               onRenderSuccess={(rendered) => {
