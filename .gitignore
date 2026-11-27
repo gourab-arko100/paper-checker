@@ -1,0 +1,12 @@
+node_modules/
+.next/
+.env*
+!.env.example
+*.tsbuildinfo
+.vercel/
+attachments/
+library-files/
+scratch/
+shared/
+
+next-env.d.ts
